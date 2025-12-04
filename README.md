@@ -31,10 +31,10 @@ g clone
 
 ```bash
 # Базовый запуск: анализ текущей директории
-cds-analyzer .
+cdscore.py .
 
 # Запуск с порогом провала (Failure Threshold) для CI
-cds-analyzer --path src/ --min-cds 0.5
+cdscore.py --path src/ --min-cds 0.5
 ``` -->
 
 <!-- ### Вывод результатов
