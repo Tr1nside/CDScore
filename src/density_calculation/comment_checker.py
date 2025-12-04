@@ -1,3 +1,4 @@
 class CommentChecker:
     def __init__(self) -> None:
-        pass
+        """Init comment checker"""
+        ...

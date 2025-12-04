@@ -3,7 +3,11 @@ from abc import ABC, abstractmethod
 
 class AbstractOutput(ABC):
     @abstractmethod
-    def error(self, error_text: str) -> None: ...
+    def message_error(self, error_text: str) -> None:
+        """Abstract function for error message"""
+        ...
 
     @abstractmethod
-    def info(self, info_text: str) -> None: ...
+    def message_info(self, info_text: str) -> None:
+        """Abstract function for info message"""
+        ...

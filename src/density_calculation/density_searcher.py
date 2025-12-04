@@ -2,8 +2,6 @@ from pathlib import Path
 
 
 class DensitySearcher:
-    def __init__(self) -> None:
-        pass
-
     def start_analysis(self, path: Path) -> float:
-        return 0.7
+        TEST_SCORE = 0.7
+        return TEST_SCORE

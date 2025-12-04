@@ -3,6 +3,7 @@ name = "qscad"
 version = "0.12.1-alpha"
 requires-python = ">=3.12"
 
+
 # Настрйки Ruff
 [tool.ruff]
 line-length = 120
@@ -10,12 +11,14 @@ target-version = "py312"
 fix = true
 lint.select = ["E", "F", "I", "B", "UP"]
 
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
 docstring-code-format = true
 line-ending = "auto"
 docstring-code-line-length = "dynamic"
+
 
 # Настрйки MyPy
 [tool.mypy]
@@ -27,11 +30,13 @@ disallow_any_unimported = false
 disallow_incomplete_defs = true
 disallow_untyped_calls = true
 
+
 # Настройка Pytest 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-v"               # Флаг для показа подробного вывода 
+addopts = "-v"
 python_files = ["test_*.py"]
+
 
 [tool.pip-tools]
 allow-unsafe = false

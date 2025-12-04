@@ -1,9 +1,9 @@
 import sys
 
-from src.cds_app import CDSApp
+from src import CDSApp
 
 
-def main():
+def main() -> int:
     app = CDSApp(sys.argv[1:])
     return app.run()
 

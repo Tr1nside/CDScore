@@ -1,3 +1,4 @@
 class CDSScoringManager:
     def __init__(self) -> None:
-        pass
+        """Init scoting manager"""
+        ...
