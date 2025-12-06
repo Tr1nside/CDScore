@@ -28,7 +28,7 @@ class DensitySearcher:
         if data_from_checker.score < 0:
             output_string = self._output_formatter.output_generation(data_from_checker)
             for output in self._outputs:
-                output.message_error(output_string)
+                output.message(output_string)
 
     def scoring(self, score: int) -> None:
         self._scoring_manager.add(score)

@@ -4,7 +4,7 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class CommentData:
-    """Структура данных для хранения информации о найденном комментарии."""
+    """Data structure for storing information about found comments."""
 
     file_path: Path
     line_number: int
@@ -16,7 +16,15 @@ class CommentData:
 
 @dataclass(frozen=True)
 class CheckerData:
+    """
+    Check Result for a single comment.
+
+    Aggregates the final scoring result and detailed information about the
+    error or warning found within a comment
+    """
+
     score: int
     comment_data: CommentData
+    error_string: str
 
     rule_id: int

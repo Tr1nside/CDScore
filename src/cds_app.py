@@ -50,8 +50,8 @@ class CDSApp:
 
     def run(self) -> int:
         """Запускает основной процесс анализа и возвращает код выхода (0 или 1)."""
-        self._output.message_info(f"Анализ пути: {self.root_path}")
-        self._output.message_info(f"Порог CDS: {self.min_cds_threshold}")
+        self._output.message(f"Анализ пути: {self.root_path}")
+        self._output.message(f"Порог CDS: {self.min_cds_threshold}")
 
         final_score = self._searcher.start_analysis(self.root_path)
         if final_score < self.min_cds_threshold:
