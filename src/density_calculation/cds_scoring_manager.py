@@ -1,7 +1,11 @@
 class CDSScoringManager:
     def __init__(self) -> None:
         """Init scoring manager"""
-        self.score = 0
+        self._score = 0
 
     def add(self, score: int) -> None:
-        self.score += score
+        self._score += score
+
+    @property
+    def score(self) -> int:
+        return self._score
