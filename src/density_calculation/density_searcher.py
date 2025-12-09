@@ -20,9 +20,10 @@ class DensitySearcher:
         self._outputs.add(output)
 
     def check(self, comment: CommentData) -> None:
-        checker_data = self._checker.check(comment)
-        self.notify_output(checker_data)
-        self.scoring(checker_data.score)
+        checker_datas = self._checker.check(comment)
+        for check_data in checker_datas:
+            self.notify_output(check_data)
+            self.scoring(check_data.score)
 
     def notify_output(self, data_from_checker: CheckerData) -> None:
         if data_from_checker.score < 0:
