@@ -11,10 +11,12 @@ from src.output import AbstractOutput
 class DensitySearcher:
     def __init__(self) -> None:
         self._outputs: set[AbstractOutput] = set()
-        self._finder = CommentFinder()
         self._checker = CommentChecker()
         self._output_formatter = OutputFormatter()
         self._scoring_manager = CDSScoringManager()
+
+        self._finder = CommentFinder()
+        self._finder.connect_check_action(self.check)
 
     def subscribe_output(self, output: AbstractOutput) -> None:
         self._outputs.add(output)
@@ -35,5 +37,7 @@ class DensitySearcher:
         self._scoring_manager.add(score)
 
     def start_analysis(self, path: Path) -> float:
-        TEST_SCORE = 0.7
-        return TEST_SCORE
+        self._finder.find(path)
+
+        result_score = self._scoring_manager.score
+        return result_score

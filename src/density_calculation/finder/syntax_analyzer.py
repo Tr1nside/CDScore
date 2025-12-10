@@ -33,7 +33,8 @@ class SyntaxAnalyzer:
             tree_sitter.Tree: The generated Abstract Syntax Tree (AST).
         """
         language_data = self.query_patterns.get(language, PythonData)
-        parser = tree_sitter.Parser(language_data.tree_sitter_language)
+        language_object = tree_sitter.Language(language_data.tree_sitter_language)
+        parser = tree_sitter.Parser(language_object)
         tree = parser.parse(code_bytes)
 
         return tree
@@ -51,7 +52,8 @@ class SyntaxAnalyzer:
                 and the value is a list of corresponding nodes.
         """
         language_data = self.query_patterns.get(language, PythonData)
-        query = tree_sitter.Query(language_data.tree_sitter_language, language_data.query)
+        language_object = tree_sitter.Language(language_data.tree_sitter_language)
+        query = tree_sitter.Query(language_object, language_data.query)
         query_cursor = tree_sitter.QueryCursor(query)
         captures = query_cursor.captures(tree.root_node)
 

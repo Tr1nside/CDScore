@@ -2,6 +2,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 import tree_sitter
+from loguru import logger
 
 from src.data_types import CommentData, CommentScope
 
@@ -10,20 +11,23 @@ captures_type = dict[str, list[tree_sitter.Node]]
 
 class NodeDataExtractor:
     def __init__(self) -> None:
-        self.callback_action: Callable[[CommentData], None] | None = None
+        self.callback_found_comment: Callable[[CommentData], None] | None = None
 
-    def connect_action(self, action: Callable) -> None:
-        self.callback_action = action
+    def connect_action(self, action: Callable[[CommentData], None]) -> None:
+        self.callback_found_comment = action
 
     def extract(self, filepath: Path, code_bytes: bytes, captures: captures_type) -> None:
         if "item" in captures:
+            logger.debug("Start find comment in '{}'", filepath.name)
             unique_nodes = set(captures.get("item", []))
 
             for node in unique_nodes:
                 comment_data = self._comment_data_generation(node, code_bytes, filepath)
 
-                if self.callback_action:
-                    self.callback_action(comment_data)
+                if self.callback_found_comment:
+                    self.callback_found_comment(comment_data)
+        else:
+            logger.error("Not find 'item' in captures from '{}'", filepath.name)
 
     def _get_node_scope(self, node: tree_sitter.Node) -> CommentScope:
         """
