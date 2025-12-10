@@ -1,6 +1,6 @@
 from src.data_types import CheckerData, CommentData
-from src.density_calculation.checker.abc_rule.registry import register_rule
 from src.density_calculation.checker.abc_rule.rule import CheckerRule
+from src.density_calculation.checker.abc_rule.rule_decorator import rule
 from src.density_calculation.checker.abc_rule.specification import Spec
 from src.density_calculation.checker.abc_rule.strategy import Strategy
 
@@ -9,21 +9,37 @@ RULE_ID = 101
 
 
 class MaxLenSpec(Spec):
-    """Спецификация: Комментарий превышает максимальную длину."""
+    """
+    Specification: The comment exceeds the maximum allowed length.
+    """
 
     def find_error(self, comment: CommentData) -> bool:
         """
-        Возвращает True, если длина текста комментария превышает MAX_LEN.
+        Check if the comment text length exceeds the MAX_LEN.
+
+        Args:
+            comment (CommentData): Comment details.
+
+        Returns:
+            bool: True if the text length exceeds MAX_LEN, False otherwise.
         """
         return len(comment.text) > MAX_LEN
 
 
 class MaxLenStrategy(Strategy):
-    """Стратегия: Генерация данных об ошибке превышения длины."""
+    """
+    Strategy: Generate error data for maximum length violation.
+    """
 
     def generate_error_data(self, comment: CommentData) -> CheckerData:
         """
-        Генерирует CheckerData для ошибки максимальной длины.
+        Generate CheckerData for the maximum length error.
+
+        Args:
+            comment (CommentData): Comment details that violated the rule.
+
+        Returns:
+            CheckerData: The error data structure.
         """
         current_len = len(comment.text)
         error_msg = f"Комментарий слишком длинный ({current_len} символов). Максимально разрешенная длина: {MAX_LEN}."
@@ -36,5 +52,35 @@ class MaxLenStrategy(Strategy):
         )
 
 
-rule = CheckerRule(RULE_ID, MaxLenSpec(), MaxLenStrategy())
-register_rule(rule)
+@rule
+class MaxLenRule(CheckerRule):
+    """
+    Rule to check if a comment exceeds the maximum allowed length (MAX_LEN).
+    """
+
+    def _create_strategy(self) -> Strategy:
+        """
+        Create the strategy object.
+
+        Returns:
+            Strategy: An instance of MaxLenStrategy.
+        """
+        return MaxLenStrategy()
+
+    def _create_specification(self) -> Spec:
+        """
+        Create the specification object.
+
+        Returns:
+            Spec: An instance of MaxLenSpec.
+        """
+        return MaxLenSpec()
+
+    def _set_code(self) -> int:
+        """
+        Set the unique identifier code for the rule.
+
+        Returns:
+            int: The rule's unique code (RULE_ID).
+        """
+        return RULE_ID
