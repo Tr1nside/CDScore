@@ -1,8 +1,8 @@
 from src.data_types import CheckerData, CommentData
-from src.density_calculation.abc_rule.registry import register_rule
-from src.density_calculation.abc_rule.rule import CheckerRule
-from src.density_calculation.abc_rule.specification import Spec
-from src.density_calculation.abc_rule.strategy import Strategy
+from src.density_calculation.checker.abc_rule.registry import register_rule
+from src.density_calculation.checker.abc_rule.rule import CheckerRule
+from src.density_calculation.checker.abc_rule.specification import Spec
+from src.density_calculation.checker.abc_rule.strategy import Strategy
 
 MIN_LEN = 7
 RULE_ID = 102

@@ -1,4 +1,4 @@
-from src.density_calculation.abc_rule.rule import CheckerRule
+from src.density_calculation.checker.abc_rule.rule import CheckerRule
 
 
 class RuleRegistry:

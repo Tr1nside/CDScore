@@ -1,6 +1,6 @@
 from src.data_types import CheckerData, CommentData
-from src.density_calculation.abc_rule.registry import RuleRegistry
-from src.density_calculation.abc_rule.rule import CheckerRule
+from src.density_calculation.checker.abc_rule.registry import RuleRegistry
+from src.density_calculation.checker.abc_rule.rule import CheckerRule
 
 
 class CommentChecker:
