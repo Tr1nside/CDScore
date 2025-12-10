@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from src.density_calculation.density_searcher import DensitySearcher
+from src.density_calculation import DensitySearcher
 from src.logging_setup import setup_logging
 from src.output.cli_output import CLIOutput
 

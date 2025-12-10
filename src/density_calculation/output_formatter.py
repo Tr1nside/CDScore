@@ -46,7 +46,8 @@ class OutputFormatter:
         score = checker_data.score if checker_data.score < 0 else f"-{checker_data.score}"
 
         comment_string = (
-            f"{comment_data.line_number}:{column} {checker_data.error_string} {score} {checker_data.rule_id}"
+            f"{comment_data.start_line_number}:{comment_data.end_line_number}-{column} "
+            f"{checker_data.error_string} {score} {checker_data.rule_id}"
         )
         return comment_string
 
