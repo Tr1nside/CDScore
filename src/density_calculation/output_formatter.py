@@ -1,22 +1,34 @@
+"""
+Define a class for formatting comment checking results into a displayable string.
+
+Author: Petr Lavrishchev
+License: MIT License (see LICENSE file for details)
+"""
+
 from pathlib import Path
 
 from src.data_types import CheckerData
 
 
 class OutputFormatter:
+    """
+    Format the results of a comment check (CheckerData) into a human-readable
+    output string, grouping messages by file.
+    """
+
     def __init__(self) -> None:
-        """OutputFormatter initialization"""
+        """Initialize the formatter and track the currently processed file path."""
         self._current_file: None | Path = None
 
     def output_generation(self, checker_data: CheckerData) -> str:
         """
-        Generate output message
+        Generate the complete output message, including the filename if it is new.
 
         Args:
-            checker_data(CheckerData): Comment data from CommentChecker
+            checker_data (CheckerData): Comment data and check results from CommentChecker.
 
         Returns:
-            Output message
+            str: The formatted output message string.
         """
         comment_data = checker_data.comment_data
         output_parts: list[str] = []
@@ -32,13 +44,13 @@ class OutputFormatter:
 
     def _generate_comment_string(self, checker_data: CheckerData) -> str:
         """
-        Generate comment string for output message.
+        Generate the detailed comment string part of the output message.
 
         Args:
-            checker_data(CheckerData): Comment data from CommentChecker.
+            checker_data (CheckerData): Comment data and check results from CommentChecker.
 
         Returns:
-            Comment string.
+            str: The formatted string detailing the comment location, error, and score.
         """
         comment_data = checker_data.comment_data
         score = checker_data.score if checker_data.score < 0 else f"-{checker_data.score}"
@@ -52,13 +64,15 @@ class OutputFormatter:
 
     def _check_current_file(self, filepath: Path) -> bool:
         """
-        Checking if the current file has changed.
+        Check if the current file being processed has changed.
+
+        If the file has changed, update the internal state to the new file path.
 
         Args:
-            filepath(Path): Path to the file containing the comment to be checked.
+            filepath (pathlib.Path): Path to the file containing the comment to be checked.
 
         Returns:
-            True if file has changed, else False.
+            bool: True if the file path has changed, False otherwise.
         """
         if self._current_file != filepath:
             self._current_file = filepath

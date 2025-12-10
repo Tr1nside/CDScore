@@ -1,3 +1,8 @@
+"""
+Author: Petr Lavrishchev
+License: MIT License (see LICENSE file for details)
+"""
+
 from abc import ABC, abstractmethod
 
 from src.data_types import CheckerData, CommentData

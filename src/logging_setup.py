@@ -1,3 +1,10 @@
+"""
+Define a function for setting up global logging configuration using the loguru library.
+
+Author: Petr Lavrishchev
+License: MIT License (see LICENSE file for details)
+"""
+
 import sys
 
 from loguru import logger
@@ -5,7 +12,16 @@ from loguru import logger
 
 def setup_logging(verbose: bool = False) -> None:
     """
-    Configures global logging using loguru.
+    Configure global logging using loguru, setting different levels for verbose and normal modes.
+
+    In verbose mode, logging level is set to DEBUG.
+    In normal mode, logging level is set to INFO, and only the message is displayed.
+
+    Args:
+        verbose (bool): If True, enable detailed DEBUG level logging; otherwise, use INFO level. Defaults to False.
+
+    Returns:
+        None: The function does not return a value.
     """
     logger.remove()
 
@@ -19,5 +35,4 @@ def setup_logging(verbose: bool = False) -> None:
             "<level>{message}</level>",
         )
     else:
-        # Normal mode: only INFO and ERROR
         logger.add(sys.stdout, level="INFO", format="<level>{message}</level>")
