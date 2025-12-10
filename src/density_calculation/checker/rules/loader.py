@@ -33,4 +33,4 @@ def rule_loader() -> None:
         except Exception as error:
             logger.error("Failed to load rule module {}: {}", module_info.name, error)
 
-    logger.info("Rule loading complete. Imported {} module(s).", imported_count)
+    logger.debug("Rule loading complete. Imported {} module(s).", imported_count)

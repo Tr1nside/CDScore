@@ -19,7 +19,7 @@ class CLIOutput(AbstractOutput):
         """
         Output the given information text to the standard output using logger.info.
 
-        Args:
+        Args:s
             info_text (str): The formatted message string to output.
         """
         logger.info(f"{info_text}")
