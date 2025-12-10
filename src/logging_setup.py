@@ -6,8 +6,6 @@ from loguru import logger
 def setup_logging(verbose: bool = False) -> None:
     """
     Configures global logging using loguru.
-
-    :param verbose: If True — enable debug output.
     """
     logger.remove()
 

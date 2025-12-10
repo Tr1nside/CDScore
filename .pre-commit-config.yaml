@@ -28,7 +28,7 @@ repos:
       - id: wemake-python-styleguide
         args:
           - "--max-line-length=120"
-          - "--ignore=WPS412,WPS410"
+          - "--ignore=WPS412,WPS410,E203"
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.19.1

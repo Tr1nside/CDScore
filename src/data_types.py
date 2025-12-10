@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
+from enum import Enum, auto
 from pathlib import Path
 
 
@@ -7,11 +10,15 @@ class CommentData:
     """Data structure for storing information about found comments."""
 
     file_path: Path
-    line_number: int
-
     text: str
-    end_line_number: int | None = None
-    column_start: int | None = None
+
+    start_line_number: int
+    end_line_number: int
+    column_start: int
+    column_end: int
+
+    comment_type: str
+    scope: CommentScope
 
 
 @dataclass(frozen=True)
@@ -28,3 +35,14 @@ class CheckerData:
     error_string: str
 
     rule_id: int
+
+
+class LanguagesEnum(Enum):
+    PYTHON = auto()
+
+
+class CommentScope(Enum):
+    FUNCTION = auto()
+    MODULE = auto()
+    CLASS = auto()
+    UNKNOWN = auto()

@@ -31,6 +31,7 @@ disallow_incomplete_defs = true
 disallow_untyped_calls = true
 
 
+
 # Настройка Pytest 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
