@@ -55,6 +55,6 @@ class SyntaxAnalyzer:
         language_object = tree_sitter.Language(language_data.tree_sitter_language)
         query = tree_sitter.Query(language_object, language_data.query)
         query_cursor = tree_sitter.QueryCursor(query)
-        captures = query_cursor.captures(tree.root_node)
+        captures: dict[str, list[tree_sitter.Node]] = query_cursor.captures(tree.root_node)
 
         return captures
