@@ -18,7 +18,7 @@ class CommentData:
     column_end: int
 
     comment_type: str
-    scope: str
+    scope: CommentScope
 
 
 @dataclass(frozen=True)
@@ -39,3 +39,10 @@ class CheckerData:
 
 class LanguagesEnum(Enum):
     PYTHON = auto()
+
+
+class CommentScope(Enum):
+    FUNCTION = auto()
+    MODULE = auto()
+    CLASS = auto()
+    UNKNOWN = auto()
