@@ -1,3 +1,10 @@
+"""
+Find comments in files and directories recursively.
+
+Author: Petr Lavrishchev
+License: MIT License (see LICENSE file for details)
+"""
+
 from collections.abc import Callable
 from pathlib import Path
 
@@ -9,15 +16,33 @@ from src.density_calculation.finder.syntax_analyzer import SyntaxAnalyzer
 
 
 class CommentFinder:
+    """
+    Provide methods for recursively finding comments in files and directories
+    using a syntax analyzer and node extractor.
+    """
+
     def __init__(self) -> None:
-        """Init comment finder"""
+        """Initialize the comment finder."""
         self.syntax_analyzer = SyntaxAnalyzer()
         self.node_extractor = NodeDataExtractor()
 
     def connect_check_action(self, check_action: Callable[[CommentData], None]) -> None:
+        """
+        Connect a callback function to the node extractor.
+
+        Args:
+            check_action (Callable[[CommentData], None]): The function to call
+                for each found comment.
+        """
         self.node_extractor.connect_action(check_action)
 
     def find(self, path: Path) -> None:
+        """
+        Recursively find comments in the given path (file or directory).
+
+        Args:
+            path (pathlib.Path): The path to the file or directory to search in.
+        """
         if self._check_exist(path):
             if path.is_dir():
                 for dir_item in path.iterdir():
@@ -30,6 +55,12 @@ class CommentFinder:
             logger.error("Searching in '{}' is not possible.", path)
 
     def _find_in_file(self, filepath: Path) -> None:
+        """
+        Find comments in a single file.
+
+        Args:
+            filepath (pathlib.Path): The path to the file.
+        """
         logger.debug("Start find in '{}'", filepath.name)
 
         language = self._parse_language(filepath)
@@ -44,12 +75,30 @@ class CommentFinder:
         self.node_extractor.extract(filepath, code_bytes, captures)
 
     def _parse_language(self, filepath: Path) -> LanguagesEnum:
+        """
+        Parse the programming language from the file extension.
+
+        Args:
+            filepath (pathlib.Path): The path to the file.
+
+        Returns:
+            LanguagesEnum: The detected programming language. Defaults to PYTHON.
+        """
         suffix_language: dict[str, LanguagesEnum] = {".py": LanguagesEnum.PYTHON}
 
         suffix = filepath.suffix
         return suffix_language.get(suffix, LanguagesEnum.PYTHON)
 
     def _check_exist(self, path: Path) -> bool:
+        """
+        Check if the given path exists.
+
+        Args:
+            path (pathlib.Path): The path to check.
+
+        Returns:
+            bool: True if the path exists, False otherwise.
+        """
         if path.exists():
             logger.debug("'{}' exists.", path)
             return True
