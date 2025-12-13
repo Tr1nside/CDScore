@@ -1,4 +1,5 @@
-from src.data_types import CheckerData, CommentData
+from src.comment_utils import normalize_docstring
+from src.data_types import CheckerData, CommentData, CommentType
 from src.density_calculation.checker.abc_rule.rule import CheckerRule
 from src.density_calculation.checker.abc_rule.rule_decorator import rule
 from src.density_calculation.checker.abc_rule.specification import Spec
@@ -23,7 +24,18 @@ class MaxLenSpec(Spec):
         Returns:
             bool: True if the text length exceeds MAX_LEN, False otherwise.
         """
-        return len(comment.text) > MAX_LEN
+
+        if comment.comment_type == CommentType.DOCSTRING:
+            return self._find_docstring(comment.text)
+        else:
+            return self._find_inline(comment.text)
+
+    def _find_docstring(self, comment_text: str) -> bool:
+        lines = normalize_docstring(comment_text)
+        return any(self._find_inline(line) for line in lines)
+
+    def _find_inline(self, comment_text: str) -> bool:
+        return len(comment_text) > MAX_LEN
 
 
 class MaxLenStrategy(Strategy):

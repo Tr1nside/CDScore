@@ -36,7 +36,7 @@ class CommentData:
     column_start: int
     column_end: int
 
-    comment_type: str
+    comment_type: CommentType
     scope: CommentScope
 
 
@@ -76,3 +76,8 @@ class CommentScope(Enum):
     MODULE = auto()
     CLASS = auto()
     UNKNOWN = auto()
+
+
+class CommentType(Enum):
+    INLINE = auto()
+    DOCSTRING = auto()

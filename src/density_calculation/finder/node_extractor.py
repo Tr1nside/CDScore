@@ -11,7 +11,7 @@ from pathlib import Path
 import tree_sitter
 from loguru import logger
 
-from src.data_types import CommentData, CommentScope
+from src.data_types import CommentData, CommentScope, CommentType
 
 captures_type = dict[str, list[tree_sitter.Node]]
 
@@ -93,16 +93,18 @@ class NodeDataExtractor:
         """
         comment_text = code_bytes[node.start_byte : node.end_byte].decode("utf-8")
 
-        start_row, start_col = node.start_point
-        end_row, end_col = node.end_point
+        start = node.start_point
+        end = node.end_point
+
+        comment_type = CommentType.INLINE if node.type == "comment" else CommentType.DOCSTRING
 
         return CommentData(
             file_path=filepath,
-            start_line_number=start_row + 1,
-            end_line_number=end_row + 1,
-            column_start=start_col + 1,
-            column_end=end_col,
+            start_line_number=start[0] + 1,
+            end_line_number=end[0] + 1,
+            column_start=start[1] + 1,
+            column_end=end[1],
             text=comment_text,
-            comment_type=node.type,
+            comment_type=comment_type,
             scope=self._get_node_scope(node),
         )
