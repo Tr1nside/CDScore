@@ -11,7 +11,10 @@ from pathlib import Path
 import tree_sitter
 from loguru import logger
 
-from src.data_types import CommentData, CommentScope, CommentType
+from src.comment_utils import parse_language
+from src.data_types import CommentData, CommentScope, CommentType, LanguagesEnum
+from src.density_calculation.finder.lang_normalizers.python_normalizer import PythonNormalizer
+from src.density_calculation.finder.language_data import LanguageNormalizer
 
 INLINE_NODE_TYPES = ("comment", "line_comment", "block_comment")
 DOCSTRING_NODE_TYPES = ("string", "string_literal")
@@ -36,6 +39,8 @@ class NodeDataExtractor:
     """
     Extract data about found comment nodes and notify a callback action.
     """
+
+    normalizers: dict[LanguagesEnum, type[LanguageNormalizer]] = {LanguagesEnum.PYTHON: PythonNormalizer}
 
     def __init__(self) -> None:
         """Initialize the extractor with no action connected."""
@@ -113,8 +118,6 @@ class NodeDataExtractor:
         Raises:
             CommentTypeError: If node type is unknow
         """
-        comment_text = code_bytes[node.start_byte : node.end_byte].decode("utf-8")
-
         start = node.start_point
         end = node.end_point
 
@@ -127,7 +130,7 @@ class NodeDataExtractor:
                 end_line_number=end[0] + 1,
                 column_start=start[1] + 1,
                 column_end=end[1],
-                text=comment_text,
+                text=self._get_comment_text(node, code_bytes, filepath, comment_type),
                 comment_type=comment_type,
                 scope=self._get_node_scope(node),
             )
@@ -141,3 +144,17 @@ class NodeDataExtractor:
             return CommentType.DOCSTRING
 
         return None
+
+    def _get_comment_text(
+        self, node: tree_sitter.Node, code_bytes: bytes, filepath: Path, comment_type: CommentType
+    ) -> list[str]:
+        language = parse_language(filepath)
+        comment_text = code_bytes[node.start_byte : node.end_byte].decode("utf-8")
+
+        normalizer = self.normalizers.get(language)
+        if normalizer:
+            normalized_lines = normalizer().normalize(comment_text, comment_type)
+            return normalized_lines
+
+        else:
+            raise TypeError("Normalizer not found")

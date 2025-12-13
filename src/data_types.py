@@ -1,6 +1,5 @@
 """
 Define core data structures (dataclasses and enums) used across the CDS analysis tool.
-
 Author: Petr Lavrishchev
 License: MIT License (see LICENSE file for details)
 """
@@ -29,7 +28,7 @@ class CommentData:
     """
 
     file_path: Path
-    text: str
+    text: list[str]
 
     start_line_number: int
     end_line_number: int
