@@ -23,7 +23,13 @@ class MinLenSpec(Spec):
         Returns:
             bool: True if the text length is less than MIN_LEN, False otherwise.
         """
-        return len(comment.text) < MIN_LEN
+        rule_list: list[bool] = []
+
+        if len(comment.text) > 0:
+            for line in comment.text:
+                rule_list.append(len(line) < MIN_LEN)
+
+        return any(rule_list)
 
 
 class MinLenStrategy(Strategy):

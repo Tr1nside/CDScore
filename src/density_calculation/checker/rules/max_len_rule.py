@@ -23,7 +23,14 @@ class MaxLenSpec(Spec):
         Returns:
             bool: True if the text length exceeds MAX_LEN, False otherwise.
         """
-        return len(comment.text) > MAX_LEN
+
+        rule_list: list[bool] = []
+
+        if len(comment.text) > 0:
+            for line in comment.text:
+                rule_list.append(len(line) > MAX_LEN)
+
+        return any(rule_list)
 
 
 class MaxLenStrategy(Strategy):
