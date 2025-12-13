@@ -10,7 +10,8 @@ from pathlib import Path
 
 from loguru import logger
 
-from src.data_types import CommentData, LanguagesEnum
+from src.comment_utils import parse_language
+from src.data_types import CommentData
 from src.density_calculation.finder.node_extractor import NodeDataExtractor
 from src.density_calculation.finder.syntax_analyzer import SyntaxAnalyzer
 
@@ -63,7 +64,7 @@ class CommentFinder:
         """
         logger.debug("Start find in '{}'", filepath.name)
 
-        language = self._parse_language(filepath)
+        language = parse_language(filepath)
         with open(filepath, "rb") as file_for_check:
             code_bytes = file_for_check.read()
 
@@ -73,21 +74,6 @@ class CommentFinder:
         logger.debug("The captures were received")
 
         self.node_extractor.extract(filepath, code_bytes, captures)
-
-    def _parse_language(self, filepath: Path) -> LanguagesEnum:
-        """
-        Parse the programming language from the file extension.
-
-        Args:
-            filepath (pathlib.Path): The path to the file.
-
-        Returns:
-            LanguagesEnum: The detected programming language. Defaults to PYTHON.
-        """
-        suffix_language: dict[str, LanguagesEnum] = {".py": LanguagesEnum.PYTHON}
-
-        suffix = filepath.suffix
-        return suffix_language.get(suffix, LanguagesEnum.PYTHON)
 
     def _check_exist(self, path: Path) -> bool:
         """
