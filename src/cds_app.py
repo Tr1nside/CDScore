@@ -100,11 +100,15 @@ class CDSApp:
         Returns:
             int: The application exit code.
         """
-        self._output.message(f"Анализ пути: {self.root_path}")
-        self._output.message(f"Порог CDS: {self.min_cds_threshold}")
+        self._output.message(f"Path analyze: {self.root_path}")
+        self._output.message(f"Minimal CDS threshold: {self.min_cds_threshold}\n")
 
         final_score = self._searcher.start_analysis(self.root_path)
+        self._output.message(f"Final CDS: {final_score}")
+
         if final_score < self.min_cds_threshold:
+            self._output.message(f"Error: CDS is too small {final_score} < {int(self.min_cds_threshold)}")
+
             return 1
 
         return 0

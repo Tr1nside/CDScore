@@ -4,6 +4,7 @@ Define the core class representing a single checking rule in the Comment Density
 Author: Petr Lavrishchev
 License: MIT License (see LICENSE file for details)
 """
+
 from abc import ABC, abstractmethod
 
 from src.data_types import CheckerData, CommentData
