@@ -13,7 +13,23 @@ from loguru import logger
 
 from src.data_types import CommentData, CommentScope, CommentType
 
+INLINE_NODE_TYPES = ("comment", "line_comment", "block_comment")
+DOCSTRING_NODE_TYPES = ("string", "string_literal")
+
 captures_type = dict[str, list[tree_sitter.Node]]
+
+
+class CommentTypeError(Exception):
+    """Exception raised when an unknown or invalid comment type is detected.
+
+    Args:
+        message (str, optional): The error message describing the issue.
+            Defaults to "Unknown type of comment".
+    """
+
+    def __init__(self, message: str = "Unknown type of comment") -> None:
+        self.message = message
+        super().__init__(self.message)
 
 
 class NodeDataExtractor:
@@ -50,8 +66,11 @@ class NodeDataExtractor:
             unique_nodes = set(captures.get("item", []))
 
             for node in unique_nodes:
-                comment_data = self._comment_data_generation(node, code_bytes, filepath)
-
+                try:
+                    comment_data = self._comment_data_generation(node, code_bytes, filepath)
+                except CommentTypeError as error:
+                    logger.error(error)
+                    continue
                 if self.callback_found_comment:
                     self.callback_found_comment(comment_data)
         else:
@@ -90,21 +109,35 @@ class NodeDataExtractor:
 
         Returns:
             CommentData: The data object containing details about the comment.
+
+        Raises:
+            CommentTypeError: If node type is unknow
         """
         comment_text = code_bytes[node.start_byte : node.end_byte].decode("utf-8")
 
         start = node.start_point
         end = node.end_point
 
-        comment_type = CommentType.INLINE if node.type == "comment" else CommentType.DOCSTRING
+        comment_type = self._get_comment_type(node.type)
 
-        return CommentData(
-            file_path=filepath,
-            start_line_number=start[0] + 1,
-            end_line_number=end[0] + 1,
-            column_start=start[1] + 1,
-            column_end=end[1],
-            text=comment_text,
-            comment_type=comment_type,
-            scope=self._get_node_scope(node),
-        )
+        if comment_type:
+            return CommentData(
+                file_path=filepath,
+                start_line_number=start[0] + 1,
+                end_line_number=end[0] + 1,
+                column_start=start[1] + 1,
+                column_end=end[1],
+                text=comment_text,
+                comment_type=comment_type,
+                scope=self._get_node_scope(node),
+            )
+        else:
+            raise CommentTypeError()
+
+    def _get_comment_type(self, node_type: str) -> CommentType | None:
+        if node_type in INLINE_NODE_TYPES:
+            return CommentType.INLINE
+        elif node_type in DOCSTRING_NODE_TYPES:
+            return CommentType.DOCSTRING
+
+        return None
