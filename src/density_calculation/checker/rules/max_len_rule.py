@@ -42,7 +42,7 @@ class MaxLenStrategy(Strategy):
             CheckerData: The error data structure.
         """
         current_len = len(comment.text)
-        error_msg = f"Комментарий слишком длинный ({current_len} символов). Максимально разрешенная длина: {MAX_LEN}."
+        error_msg = f"The comment is too long ({current_len}). Maximum length: {MAX_LEN}."
 
         return CheckerData(
             score=-5,

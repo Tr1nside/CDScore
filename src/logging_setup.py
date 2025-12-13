@@ -29,10 +29,10 @@ def setup_logging(verbose: bool = False) -> None:
         logger.add(
             sys.stdout,
             level="DEBUG",
-            format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
+            format="<level><green>{time:YYYY-MM-DD HH:mm:ss}</green></level> | "
             "<level>{level}</level> | "
-            "<cyan>{name}</cyan>:<cyan>{line}</cyan> - "
-            "<level>{message}</level>",
+            "<level><cyan>{name}</cyan>:<cyan>{line}</cyan></level> - "
+            "{message}",
         )
     else:
-        logger.add(sys.stdout, level="INFO", format="<level>{message}</level>")
+        logger.add(sys.stdout, level="INFO", format="{message}")
