@@ -4,7 +4,7 @@ from src.density_calculation.checker.abc_rule.rule_decorator import rule
 from src.density_calculation.checker.abc_rule.specification import Spec
 from src.density_calculation.checker.abc_rule.strategy import Strategy
 
-MIN_LEN = 7
+MIN_LEN = 4
 RULE_ID = 102
 
 

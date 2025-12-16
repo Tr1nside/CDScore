@@ -14,6 +14,7 @@ from src.comment_utils import parse_language
 from src.data_types import CommentData
 from src.density_calculation.finder.node_extractor import NodeDataExtractor
 from src.density_calculation.finder.syntax_analyzer import SyntaxAnalyzer
+from src.exceptions import FileTypeError
 
 
 class CommentFinder:
@@ -63,12 +64,20 @@ class CommentFinder:
             filepath (pathlib.Path): The path to the file.
         """
         logger.debug("Start find in '{}'", filepath.name)
-
-        language = parse_language(filepath)
+        try:
+            language = parse_language(filepath)
+        except FileTypeError as file_type_error:
+            logger.debug("Error in get file language: {}", file_type_error)
+            return
         with open(filepath, "rb") as file_for_check:
             code_bytes = file_for_check.read()
 
-        tree = self.syntax_analyzer.parse(code_bytes, language)
+        try:
+            tree = self.syntax_analyzer.parse(code_bytes, language)
+        except FileTypeError as file_type_error:
+            logger.debug("Error in file parse: {}", file_type_error)
+            return
+
         logger.debug("The tree was created")
         captures = self.syntax_analyzer.query_captures(tree, language)
         logger.debug("The captures were received")

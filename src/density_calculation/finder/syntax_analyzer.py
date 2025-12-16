@@ -10,6 +10,7 @@ import tree_sitter
 from src.data_types import LanguagesEnum
 from src.density_calculation.finder.language_data import LanguageData
 from src.density_calculation.finder.languages_formats import PythonData
+from src.exceptions import FileTypeError
 
 
 class SyntaxAnalyzer:
@@ -32,12 +33,15 @@ class SyntaxAnalyzer:
         Returns:
             tree_sitter.Tree: The generated Abstract Syntax Tree (AST).
         """
-        language_data = self.query_patterns.get(language, PythonData)
-        language_object = tree_sitter.Language(language_data.tree_sitter_language)
-        parser = tree_sitter.Parser(language_object)
-        tree = parser.parse(code_bytes)
+        language_data = self.query_patterns.get(language)
+        if language_data:
+            language_object = tree_sitter.Language(language_data.tree_sitter_language)
+            parser = tree_sitter.Parser(language_object)
+            tree = parser.parse(code_bytes)
 
-        return tree
+            return tree
+        else:
+            raise FileTypeError()
 
     def query_captures(self, tree: tree_sitter.Tree, language: LanguagesEnum) -> dict[str, list[tree_sitter.Node]]:
         """
