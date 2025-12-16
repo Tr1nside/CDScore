@@ -15,24 +15,12 @@ from src.comment_utils import parse_language
 from src.data_types import CommentData, CommentScope, CommentType, LanguagesEnum
 from src.density_calculation.finder.lang_normalizers.python_normalizer import PythonNormalizer
 from src.density_calculation.finder.language_data import LanguageNormalizer
+from src.exceptions import CommentTypeError
 
 INLINE_NODE_TYPES = ("comment", "line_comment", "block_comment")
 DOCSTRING_NODE_TYPES = ("string", "string_literal")
 
 captures_type = dict[str, list[tree_sitter.Node]]
-
-
-class CommentTypeError(Exception):
-    """Exception raised when an unknown or invalid comment type is detected.
-
-    Args:
-        message (str, optional): The error message describing the issue.
-            Defaults to "Unknown type of comment".
-    """
-
-    def __init__(self, message: str = "Unknown type of comment") -> None:
-        self.message = message
-        super().__init__(self.message)
 
 
 class NodeDataExtractor:
@@ -79,7 +67,7 @@ class NodeDataExtractor:
                 if self.callback_found_comment:
                     self.callback_found_comment(comment_data)
         else:
-            logger.error("Not find 'item' in captures from '{}'", filepath.name)
+            logger.debug("Not find comment in '{}'", filepath.name)
 
     def _get_node_scope(self, node: tree_sitter.Node) -> CommentScope:
         """
